@@ -71,7 +71,19 @@
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
     <![endif]-->
+    <script type="text/javascript">
 
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-39481629-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </head>
 
   <body>
@@ -82,14 +94,14 @@
         <ul class="nav nav-pills pull-right">
           <li><a href="#about">About</a></li>
         </ul>
-        <h3 class="muted">VIsualizing NFL Draft History</h3>
+        <h3 class="muted">Visualizing NFL Draft History</h3>
       </div>
 
       <hr>
       
       <div class="row">
-        <div class="btn-group span2" style="padding-top: 0px;">
-          <button class="btn btn-success">Pick your team</button>
+        <div class="btn-group span2" style="padding-top: 0px; width: 200px;">
+          <button class="btn btn-success" id="selected">Pick your team</button>
           <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
           </button>
@@ -134,12 +146,12 @@
           <p></p>
         </div>
         <div class="span7 pull-right">
-          <span class="label label-info">Visualization Type: </span>
+          <span class="label label-info">Visualization Type </span>
           <label class="radio inline">
-            <input type="radio" id="inlineCheckbox1" name="vizMode" value="individual" checked="true">Individual
+            <input type="radio" id="inlineCheckbox1" name="VizMode" value="individual" checked="true">Individual
           </label>
           <label class="radio inline">
-            <input type="radio" id="inlineCheckbox2" name="Vizmode" value="heatmap">Heatmap
+            <input type="radio" id="inlineCheckbox2" name="VizMode" value="heatmap">Heatmap
           </label>
         </div>
       </row>
@@ -201,7 +213,7 @@
       <div id="chart" style="background-color: #F7FAF0; width: 1060px;"></div>
       <script src="js/line.js"></script>
       <br/>
-      <div id="about">
+      <div id="about" class="well">
         <h3>About</h3>
         <p>This project attempts to visually show all the draft picks for a particular team from 1960 - 2012. The invidiual chart shows all the picks grouped by year, color coded by round. This can be further filtered by a particular round or a particular position.
                The heatmap chart shows how individual positions drafted for compare to each other, as displayed by intensity of the color, over a given range of years. This can be filtered by a particular decade or any starting and ending years. 

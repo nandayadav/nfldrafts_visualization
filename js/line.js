@@ -1,5 +1,5 @@
 
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
+var margin = {top: 30, right: 10, bottom: 10, left: 10},
     width = 1060 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -48,7 +48,7 @@ var categoryRange = d3.scale.category20().range();
 var colorRange = _.filter(categoryRange, function(color, index) { return index % 2 == 0 });
 colorRange = colorRange.concat( _.filter(categoryRange, function(color, index) { return index % 2 == 1 }) );
 var color = d3.scale.ordinal()
-                     .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+                     .domain(_.range(1, 21))
                      .range(colorRange);
                      
 var positionColor = d3.scale.quantize()
@@ -89,6 +89,31 @@ var labels = heatmap.selectAll(".label")
         .attr("x", function(d, i) { return i < 12 ? (d.point[0] - 55) : (d.point[0] + 30); })
         .attr("y", function(d) { return d.point[1] + 16; })
         .text("");
+        
+var roundLegend = individual.append("g");
+roundLegend.selectAll("circle")
+      .data(_.range(1, 21))
+    .enter().append("circle")
+      .attr("r", radius)
+      .attr("cx", function(d, i) { return 100 + (i * 40); })
+      .attr("cy", -14)
+      .style("fill", function(d) { return color(d); });
+      
+roundLegend.append("text")
+      .style("fill", "#000")
+      .attr("x", 20)
+      .attr("y", -10)
+      .text('Rounds: ');
+      
+roundLegend.selectAll(".roundLegend")
+      .data(_.range(1, 21))
+   .enter().append("text")
+      .attr("class", "roundLegend")
+      .style("fill", function(d) { return color(d); })
+      .attr("x", function(d, i) { return 78 + (i * 40); })
+      .attr("y", -10)
+      .text(function(d) { return d; });
+      
 
 
     
@@ -97,6 +122,8 @@ drawLine(0, 0, 0, height, 1);
 drawLine(0, height, width, height, 1); 
 drawLine(width, 0, width, height, 1); 
 var mid = drawLine(0, height/2, width, height/2, 0);
+drawText(width/4, height + 20, "DEFENSE");
+drawText(3 * width/4, height + 20, "OFFENSE");
 
 individual.selectAll(".fieldLabel")
       .data(['OFFENSE', 'DEFENSE'])
@@ -248,6 +275,9 @@ function attachXYpositions() {
 }
 
 function drawIndividual() {
+  roundLegend.transition()
+          .delay(700)
+          .style("display", "block");
   positionCircles.transition()
       .duration(700)
       .attr("r", 0);
@@ -292,6 +322,9 @@ function drawHeatmap() {
   // heatmap.transition()
   //     .delay(700)
   //     .duration(700).style("display", "block");
+  roundLegend.transition()
+          .delay(700)
+          .style("display", "none");
   playerCircles.transition()
       //.delay(delay)
       .duration(700)
@@ -521,8 +554,8 @@ $(function() {
     var $team = $(e.currentTarget).data('team');
     var $fullname = $(e.currentTarget).html();
     $("#logo img").attr("src", "logos/" + $team + ".gif");
-    $("#info h6").text($fullname);
     $("#logo").show();
+    $("#selected").html($fullname);
     loadCSV($team);
   });
   
@@ -531,7 +564,7 @@ $(function() {
     redraw($selected);
   });
   
-  $(".btn").on("click", function(e) {
+  $(".btn-small").on("click", function(e) {
     var $toggle = $(e.currentTarget).text();
     if ( $toggle == 'Round' ) {
       $("#round-links").show();
