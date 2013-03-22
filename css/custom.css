@@ -48,3 +48,8 @@ circle {
   font: 10px "Helvetica Neue", Sans-Serif;
   color: white;
 }
+
+#chart {
+  background-color: #F7FAF0; 
+  width: 1060px;
+}

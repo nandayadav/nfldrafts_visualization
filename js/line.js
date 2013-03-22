@@ -135,7 +135,7 @@ individual.selectAll(".fieldLabel")
       .text("");
       
 heatmap.selectAll(".fieldLabel")
-      .data(['OFFENSE', 'DEFENSE'])
+      .data(['DEFENSE', 'OFFENSE'])
     .enter().append("text")
       .attr("class", "fieldLabel")
       .attr("fill", labelColor)
