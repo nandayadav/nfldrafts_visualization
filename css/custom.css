@@ -1,0 +1,50 @@
+ul {
+  list-style-type: none;
+}
+
+circle {
+  fill: none;
+  stroke: #000;
+  stroke-width: 0;
+}
+
+
+/* Custom container */
+.container-narrow {
+  margin: 0 auto;
+  max-width: 1000px;
+}
+.container-narrow > hr {
+  margin: 10px 0;
+}
+
+.label text {
+  font: 8px sans-serif;
+  /*fill: #000;*/
+}
+
+
+.position text {
+  font: 8px sans-serif;
+  /*fill: #000;*/
+}
+
+#slider {
+  width: 794px;
+  margin: 4px 4px 0 0;
+}
+
+
+.medium {
+    font-size: 14px;
+}
+
+.ui-slider-handle {
+    outline: none;
+}
+
+.ui-tooltip {
+  background: black;
+  font: 10px "Helvetica Neue", Sans-Serif;
+  color: white;
+}

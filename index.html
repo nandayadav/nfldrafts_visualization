@@ -17,55 +17,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" />
     <link href="css/bootstrap-slider.css" rel="stylesheet">
-    <style type="text/css">
-      circle {
-        fill: none;
-        stroke: #000;
-        stroke-width: 0;
-      }
-      
-
-      /* Custom container */
-      .container-narrow {
-        margin: 0 auto;
-        max-width: 1000px;
-      }
-      .container-narrow > hr {
-        margin: 10px 0;
-      }
-      
-      .label text {
-        font: 8px sans-serif;
-        /*fill: #000;*/
-      }
-      
-      
-      .position text {
-        font: 8px sans-serif;
-        /*fill: #000;*/
-      }
-      
-      #slider {
-        width: 794px;
-        margin: 4px 4px 0 0;
-      }
-      
-
-      .medium {
-          font-size: 14px;
-      }
-
-      .ui-slider-handle {
-          outline: none;
-      }
-      
-      .ui-tooltip {
-        background: black;
-        font: 10px "Helvetica Neue", Sans-Serif;
-        color: white;
-      }
-
-    </style>
+    <link href="css/custom.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -148,10 +100,10 @@
         <div class="span7 pull-right">
           <span class="label label-info">Visualization Type </span>
           <label class="radio inline">
-            <input type="radio" id="inlineCheckbox1" name="VizMode" value="individual" checked="true">Individual
+            <input type="radio" id="individual" name="VizMode" value="individual" checked="true">Individual
           </label>
           <label class="radio inline">
-            <input type="radio" id="inlineCheckbox2" name="VizMode" value="heatmap">Heatmap
+            <input type="radio" id="heatmap" name="VizMode" value="heatmap">Heatmap
           </label>
         </div>
       </row>
@@ -233,6 +185,14 @@
           <li>E -> WR(Wide Receiver)</li>
         
         </ul> 
+        <h4>Data Source & Credits:</h4>
+        <p>Data Source: <a href="http://www.pro-football-reference.com/" target="_blank">Pro-Football-reference.com</a><br/>
+               Built with: <a href="http://d3js.org/" target="_blank">D3.js</a><br/>
+               <a href="https://github.com/nandayadav/nfldrafts_visualization" target="_blank">Source Code</a>
+        </p>
+        <p>This project is for educational purposes, I do not own the NFL or its affiliated teams or logos. Teams and Logos are copyright of the NFL</p>
+        Author: <a href="https://twitter.com/nandayadav" target="_blank">Nanda Yadav</a><br/>
+               
       </div>
       
       

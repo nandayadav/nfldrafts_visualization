@@ -53,6 +53,8 @@ var color = d3.scale.ordinal()
                      
 var positionColor = d3.scale.quantize()
                             .range(colorbrewer.Blues[9]);
+                            
+var labelColor = "#174545";
 
 var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -100,7 +102,7 @@ roundLegend.selectAll("circle")
       .style("fill", function(d) { return color(d); });
       
 roundLegend.append("text")
-      .style("fill", "#000")
+      .style("fill", labelColor)
       .attr("x", 20)
       .attr("y", -10)
       .text('Rounds: ');
@@ -122,16 +124,24 @@ drawLine(0, 0, 0, height, 1);
 drawLine(0, height, width, height, 1); 
 drawLine(width, 0, width, height, 1); 
 var mid = drawLine(0, height/2, width, height/2, 0);
-drawText(width/4, height + 20, "DEFENSE");
-drawText(3 * width/4, height + 20, "OFFENSE");
+var midHeat = drawLine(width/2, 0, width/2, height, 0);
 
 individual.selectAll(".fieldLabel")
       .data(['OFFENSE', 'DEFENSE'])
     .enter().append("text")
       .attr("class", "fieldLabel")
-      .attr("fill", "#174545")
+      .attr("fill", labelColor)
       .attr("transform", function(d, i) { return "translate("  + (16) + "," + ((height/2 * i) + height/3) + ")" + "rotate(270, 0, 0)" ; })
-      .text(function(d) { return d; })
+      .text("");
+      
+heatmap.selectAll(".fieldLabel")
+      .data(['OFFENSE', 'DEFENSE'])
+    .enter().append("text")
+      .attr("class", "fieldLabel")
+      .attr("fill", labelColor)
+      .attr("x", function(d, i) { return width/4 + (width/2 * i); })
+      .attr("y", height - 20)
+      .text("");
 
 
 function filterByRound(round) {
@@ -290,10 +300,22 @@ function drawIndividual() {
       .duration(700)
       .style("fill", "#F7FAF0");
       
+  heatmap.selectAll(".fieldLabel").transition()
+      .delay(500)
+      .text("");
+      
+  individual.selectAll(".fieldLabel").transition()
+      .delay(500)
+      .text(function(d) { return d; });
+  
   mid.transition()
       .delay(500)
       .duration(100)
       .style("stroke-width", 1);
+      
+  midHeat.transition()
+      .duration(700)
+      .style("stroke-width", 0);
       
   playerCircles.transition()
       .delay(500)
@@ -310,7 +332,7 @@ function drawIndividual() {
   individual.selectAll(".yearLabel").transition()
       .delay(1000)
       .duration(200)
-      .attr("fill", "#174545");
+      .text(function(d) { return d; })
       
       
   _.each(yPositions, function(year) {
@@ -325,6 +347,11 @@ function drawHeatmap() {
   roundLegend.transition()
           .delay(700)
           .style("display", "none");
+          
+  individual.selectAll(".fieldLabel").transition()
+      .delay(500)
+      .text("");
+      
   playerCircles.transition()
       //.delay(delay)
       .duration(700)
@@ -338,11 +365,20 @@ function drawHeatmap() {
       
   individual.selectAll(".yearLabel").transition()
       .duration(700)
-      .attr("fill", "#F7FAF0");
+      .text("");
       
   mid.transition()
     .duration(700)
     .style("stroke-width", 0);
+
+  midHeat.transition()
+      .delay(500)
+      .duration(100)
+      .style("stroke-width", 1);
+    
+  heatmap.selectAll(".fieldLabel").transition()
+      .delay(700)
+      .text(function(d) { return d; })
       
   positionCircles.transition()
       .delay(500)
@@ -524,8 +560,8 @@ function setupYears(min, max) {
     .enter().append("text")
       .attr("class", "yearLabel")
       .attr("transform", function(d, i) { return "translate("  + (leftBuffer + 6 + i*yearWidth) + "," + (height - 4) + ")" + "rotate(270, 0, 0)" ; })
-      .attr("fill", "#fff")
-      .text(function(d) { return d; });
+      .attr("fill", 174545)
+      .text("");
 }
 
 function drawLine(x1, y1, x2, y2, width) {
@@ -556,10 +592,11 @@ $(function() {
     $("#logo img").attr("src", "logos/" + $team + ".gif");
     $("#logo").show();
     $("#selected").html($fullname);
+    $(':radio[name=VizMode]')[0].checked = true;
     loadCSV($team);
   });
   
-  $("input[type=radio]").on("change", function(e) {
+  $(":radio").on("change", function(e) {
     var $selected = $(e.currentTarget).val();
     redraw($selected);
   });
