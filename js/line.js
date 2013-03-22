@@ -74,16 +74,20 @@ var positionCircles = heatmap.selectAll("circle")
          .attr("cx", function(d) { return d.point[0]; })
          .attr("cy", function(d) { return d.point[1]; });
          
-var positionLabels = heatmap.selectAll(".position")
+        
+var individualLegends = individual.append("g").style("display", "none");
+var heatmapLegends = heatmap.append("g").style("display", "none");
+
+heatmapLegends.selectAll(".position")
         .data(positions)
       .enter().append("text")
         .attr("class", "position")
         .style("fill", labelColor)
         .attr("x", function(d, i) { return i < 12 ? (d.point[0] - 55) : (d.point[0] + 30); })
         .attr("y", function(d) { return d.point[1] + 4; })
-        .text("");
+        .text(function(d) { return d.name; });
         
-var labels = heatmap.selectAll(".label")
+heatmapLegends.selectAll(".label")
         .data(positions)
       .enter().append("text")
         .attr("class", "label")
@@ -91,9 +95,8 @@ var labels = heatmap.selectAll(".label")
         .attr("x", function(d, i) { return i < 12 ? (d.point[0] - 55) : (d.point[0] + 30); })
         .attr("y", function(d) { return d.point[1] + 16; })
         .text("");
-        
-var roundLegend = individual.append("g");
-roundLegend.selectAll("circle")
+
+individualLegends.selectAll("circle")
       .data(_.range(1, 21))
     .enter().append("circle")
       .attr("r", radius)
@@ -101,16 +104,16 @@ roundLegend.selectAll("circle")
       .attr("cy", -14)
       .style("fill", function(d) { return color(d); });
       
-roundLegend.append("text")
+individualLegends.append("text")
       .style("fill", labelColor)
       .attr("x", 20)
       .attr("y", -10)
       .text('Rounds: ');
       
-roundLegend.selectAll(".roundLegend")
+individualLegends.selectAll(".individualLegends")
       .data(_.range(1, 21))
    .enter().append("text")
-      .attr("class", "roundLegend")
+      .attr("class", "individualLegends")
       .style("fill", function(d) { return color(d); })
       .attr("x", function(d, i) { return 78 + (i * 40); })
       .attr("y", -10)
@@ -126,7 +129,7 @@ drawLine(width, 0, width, height, 1);
 var mid = drawLine(0, height/2, width, height/2, 0);
 var midHeat = drawLine(width/2, 0, width/2, height, 0);
 
-individual.selectAll(".fieldLabel")
+individualLegends.selectAll(".fieldLabel")
       .data(['OFFENSE', 'DEFENSE'])
     .enter().append("text")
       .attr("class", "fieldLabel")
@@ -134,7 +137,7 @@ individual.selectAll(".fieldLabel")
       .attr("transform", function(d, i) { return "translate("  + (16) + "," + ((height/2 * i) + height/3) + ")" + "rotate(270, 0, 0)" ; })
       .text("");
       
-heatmap.selectAll(".fieldLabel")
+heatmapLegends.selectAll(".fieldLabel")
       .data(['DEFENSE', 'OFFENSE'])
     .enter().append("text")
       .attr("class", "fieldLabel")
@@ -200,7 +203,7 @@ function filterByYear(startYr, endYr) {
   positionCircles.each(function(d) {
     d3.select(this).style("fill", function() { return positionColor(d.count); });
   });
-  labels.each(function(d) {
+  heatmapLegends.selectAll(".label").each(function(d) {
     d3.select(this).text(function() { return "(" + d.count + ")"; });
   });
 }
@@ -285,24 +288,17 @@ function attachXYpositions() {
 }
 
 function drawIndividual() {
-  roundLegend.transition()
+  individualLegends.transition()
           .delay(700)
           .style("display", "block");
+          
+  heatmapLegends.transition()
+          .delay(700)
+          .style("display", "none");
+          
   positionCircles.transition()
       .duration(700)
       .attr("r", 0);
-      
-  positionLabels.transition()
-      .delay(500)
-      .text("");
-      
-  labels.transition()
-      .delay(500)
-      .text("");
-      
-  heatmap.selectAll(".fieldLabel").transition()
-      .delay(500)
-      .text("");
       
   individual.selectAll(".fieldLabel").transition()
       .delay(500)
@@ -329,11 +325,6 @@ function drawIndividual() {
       .attr("y1", 0)
       .attr("y2", height - 40);
       
-  individual.selectAll(".yearLabel").transition()
-      .delay(1000)
-      .duration(200)
-      .text(function(d) { return d; })
-      
       
   _.each(yPositions, function(year) {
     year = {"offense": [], "defense": []};
@@ -341,16 +332,14 @@ function drawIndividual() {
 }
 
 function drawHeatmap() {
-  // heatmap.transition()
-  //     .delay(700)
-  //     .duration(700).style("display", "block");
-  roundLegend.transition()
+  individualLegends.transition()
           .delay(700)
           .style("display", "none");
           
-  individual.selectAll(".fieldLabel").transition()
-      .delay(500)
-      .text("");
+  heatmapLegends.transition()
+          .delay(700)
+          .style("display", "block");
+
       
   playerCircles.transition()
       //.delay(delay)
@@ -363,9 +352,9 @@ function drawHeatmap() {
       .attr("y1", height/2)
       .attr("y2", height/2);
       
-  individual.selectAll(".yearLabel").transition()
-      .duration(700)
-      .text("");
+  // individual.selectAll(".yearLabel").transition()
+  //     .duration(700)
+  //     .text("");
       
   mid.transition()
     .duration(700)
@@ -376,9 +365,9 @@ function drawHeatmap() {
       .duration(100)
       .style("stroke-width", 1);
       
-  positionLabels.transition()
-      .delay(700)
-      .text(function(d) { return d.name; });
+  // positionLabels.transition()
+  //     .delay(700)
+  //     .text(function(d) { return d.name; });
     
   heatmap.selectAll(".fieldLabel").transition()
       .delay(700)
@@ -389,9 +378,9 @@ function drawHeatmap() {
       .duration(700)
       .attr("r", 25);
       
-  labels.transition()
-      .delay(700)
-      .text(function(d) { return "(" + d.count + ")"; });
+  // labels.transition()
+  //     .delay(700)
+  //     .text(function(d) { return "(" + d.count + ")"; });
 }
 
 //1. assume data is already bound to playerCircles and positionCircles
@@ -422,9 +411,9 @@ function draw() {
     positionCircles.each(function(d) {
       d3.select(this).style("fill", function() { return positionColor(d.count); });
     });
-    // labels.each(function(d) {
-    //   d3.select(this).text(function() { return "(" + d.count + ")"; });
-    // });
+    heatmapLegends.selectAll(".label").each(function(d) {
+      d3.select(this).text(function() { return "(" + d.count + ")"; });
+    });
   
 }
 
@@ -553,13 +542,13 @@ function setupYears(min, max) {
       .style("stroke", "#9FC7DF")
       .style("stroke-width", 1);
       
-  individual.selectAll(".yearLabel")
+  individualLegends.selectAll(".yearLabel")
       .data(years)
     .enter().append("text")
       .attr("class", "yearLabel")
       .attr("transform", function(d, i) { return "translate("  + (leftBuffer + 6 + i*yearWidth) + "," + (height - 4) + ")" + "rotate(270, 0, 0)" ; })
       .attr("fill", 174545)
-      .text("");
+      .text(function(d) { return d; });
 }
 
 function drawLine(x1, y1, x2, y2, width) {
