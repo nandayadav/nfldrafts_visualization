@@ -235,12 +235,10 @@ function loadCSV(team) {
       var position = player.Pos;
       year = player.Year;
       if ( position == 'NT' )
-        console.log("Position is NT for " + player['']);
+        position = 'DT'
       if ( position == 'HB' )
         position = 'RB';
       else if ( position == 'DL' )
-        position = 'DT';
-      else if ( position == 'NT' )
         position = 'DT';
       else if ( position == 'OL' )
         position = 'T';
@@ -256,6 +254,8 @@ function loadCSV(team) {
         position = 'RB';
       else if ( position == 'SE' ) //Split END
         position = 'WR';
+      else if ( position == 'FL' ) //Split END
+        position = 'WR';
       player.Pos = position;
       
       positions.forEach(function(row) {
@@ -270,7 +270,6 @@ function loadCSV(team) {
       startYear = parseInt(year);
     });
     attachXYpositions();
-    console.log("Drawing...");    
     draw();    
   });
 }
@@ -287,7 +286,7 @@ function attachXYpositions() {
   })
 }
 
-function drawIndividual() {
+function drawIndividual(delay) {
   individualLegends.transition()
           .delay(700)
           .style("display", "block");
@@ -305,7 +304,7 @@ function drawIndividual() {
       .text(function(d) { return d; });
   
   mid.transition()
-      .delay(500)
+      .delay(delay)
       .duration(100)
       .style("stroke-width", 1);
       
@@ -314,13 +313,13 @@ function drawIndividual() {
       .style("stroke-width", 0);
       
   playerCircles.transition()
-      .delay(500)
+      .delay(delay)
       .attr("r", radius)
       .duration(700)
       .attr("cy", function(d) { return d.yPosition; });
       
   individual.selectAll(".yearDivider").transition()
-      .delay(500)
+      .delay(delay)
       .duration(700)
       .attr("y1", 0)
       .attr("y2", height - 40);
@@ -400,7 +399,7 @@ function draw() {
       .on("mouseover", mouseOver)
       .on("mouseout", mouseOut);
     attachTooltips();
-    redraw();
+    redraw(0);
     
 
     initSlider(startYear, endYear);
@@ -417,13 +416,13 @@ function draw() {
   
 }
 
-function redraw() {
+function redraw(delay) {
   //vizMode = mode;
   if ( vizMode == 'individual' ) {
     $("#round-filter").show();
     $("#decade-filter").hide();
     $("#sliderContainer").hide();
-    drawIndividual();
+    drawIndividual(delay);
   } else {
     $("#round-filter").hide();
     $("#decade-filter").show();
@@ -439,18 +438,10 @@ function mouseOver(d) {
 function mouseOut(d) {
   d3.select(this).style('stroke-width', 0);
 }
-
-//Custom delay based on the year of the draft, mimics propagation of draft from left to right
-function delay(d) {
-  var years = (endYear + 1) - startYear;
-  var counter = d.Year - startYear;
-  return counter * 10;
-}
     
 
 //For given year value, return the x position
 function yearX(d) {
-  console.log("Calling yearXX");
   var years = (endYear + 1) - startYear;
   var yearWidth = (width - leftBuffer)/ years;
   var counter = d.Year - startYear;
@@ -471,7 +462,7 @@ function yearY(d) {
     available = last + 2*radius;
     yPositions[d.Year]['defense'].push(available)
   } else {
-    console.log("Not found for: " + d.Pos);
+    console.log("Not found for: " + d.Pos + " >...name: " + d['']);
     last = _.last(yPositions[d.Year]['defense']);
     available = last + 2*radius;
     yPositions[d.Year]['defense'].push(available)
@@ -587,7 +578,7 @@ $(function() {
   $(":radio").on("change", function(e) {
     var $selected = $(e.currentTarget).val();
     vizMode = $selected;
-    redraw();
+    redraw(500);
   });
   
   $(".btn-small").on("click", function(e) {
