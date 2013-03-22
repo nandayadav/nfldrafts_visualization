@@ -78,16 +78,16 @@ var positionLabels = heatmap.selectAll(".position")
         .data(positions)
       .enter().append("text")
         .attr("class", "position")
-        .style("fill", "#F7FAF0")
+        .style("fill", labelColor)
         .attr("x", function(d, i) { return i < 12 ? (d.point[0] - 55) : (d.point[0] + 30); })
         .attr("y", function(d) { return d.point[1] + 4; })
-        .text(function(d) { return d.name; });
+        .text("");
         
 var labels = heatmap.selectAll(".label")
         .data(positions)
       .enter().append("text")
         .attr("class", "label")
-        .style("fill", "#F7FAF0")
+        .style("fill", labelColor)
         .attr("x", function(d, i) { return i < 12 ? (d.point[0] - 55) : (d.point[0] + 30); })
         .attr("y", function(d) { return d.point[1] + 16; })
         .text("");
@@ -293,12 +293,12 @@ function drawIndividual() {
       .attr("r", 0);
       
   positionLabels.transition()
-      .duration(700)
-      .style("fill", "#F7FAF0");
+      .delay(500)
+      .text("");
       
   labels.transition()
-      .duration(700)
-      .style("fill", "#F7FAF0");
+      .delay(500)
+      .text("");
       
   heatmap.selectAll(".fieldLabel").transition()
       .delay(500)
@@ -375,6 +375,10 @@ function drawHeatmap() {
       .delay(500)
       .duration(100)
       .style("stroke-width", 1);
+      
+  positionLabels.transition()
+      .delay(700)
+      .text(function(d) { return d.name; });
     
   heatmap.selectAll(".fieldLabel").transition()
       .delay(700)
@@ -385,15 +389,9 @@ function drawHeatmap() {
       .duration(700)
       .attr("r", 25);
       
-  positionLabels.transition()
-      .delay(500)
-      .duration(700)
-      .style("fill", "#000");
-      
   labels.transition()
-      .delay(500)
-      .duration(700)
-      .style("fill", "#000");
+      .delay(700)
+      .text(function(d) { return "(" + d.count + ")"; });
 }
 
 //1. assume data is already bound to playerCircles and positionCircles
@@ -424,9 +422,9 @@ function draw() {
     positionCircles.each(function(d) {
       d3.select(this).style("fill", function() { return positionColor(d.count); });
     });
-    labels.each(function(d) {
-      d3.select(this).text(function() { return "(" + d.count + ")"; });
-    });
+    // labels.each(function(d) {
+    //   d3.select(this).text(function() { return "(" + d.count + ")"; });
+    // });
   
 }
 
