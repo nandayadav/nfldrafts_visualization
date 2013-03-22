@@ -65,7 +65,7 @@ var svg = d3.select("#chart").append("svg")
 //Use 2 groups for 2 separate graph views
 var heatmap = svg.append("g")
 var individual = svg.append("g");
-//var heatmap = svg.append("g"); //.style("display", "none");
+
 var positionCircles = heatmap.selectAll("circle")
          .data(positions)
       .enter().append("circle")
@@ -400,7 +400,7 @@ function draw() {
       .on("mouseover", mouseOver)
       .on("mouseout", mouseOut);
     attachTooltips();
-    redraw('individual');
+    redraw();
     
 
     initSlider(startYear, endYear);
@@ -417,8 +417,9 @@ function draw() {
   
 }
 
-function redraw(mode) {
-  if ( mode == 'individual' ) {
+function redraw() {
+  //vizMode = mode;
+  if ( vizMode == 'individual' ) {
     $("#round-filter").show();
     $("#decade-filter").hide();
     $("#sliderContainer").hide();
@@ -579,13 +580,14 @@ $(function() {
     $("#logo img").attr("src", "logos/" + $team + ".gif");
     $("#logo").show();
     $("#selected").html($fullname);
-    $(':radio[name=VizMode]')[0].checked = true;
+    //$(':radio[name=VizMode]')[0].checked = true;
     loadCSV($team);
   });
   
   $(":radio").on("change", function(e) {
     var $selected = $(e.currentTarget).val();
-    redraw($selected);
+    vizMode = $selected;
+    redraw();
   });
   
   $(".btn-small").on("click", function(e) {
