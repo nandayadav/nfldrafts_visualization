@@ -1,5 +1,5 @@
 This project attempts to visually show all the draft picks for a particular team from 1960 - 2012. The invidiual chart shows all the picks grouped by year, color coded by round. 
 
 Built with: d3.js and some underscore.js
-nandayadav.github.com/nfldrafts_visualization
+http://nandayadav.github.com/nfldrafts_visualization
 
