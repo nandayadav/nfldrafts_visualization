@@ -149,11 +149,11 @@ heatmapLegends.selectAll(".fieldLabel")
 
 function filterByRound(round) {
   if ( round == 'All' ) {
-    playerCircles.transition().attr('r', 5).duration(500);
+    playerCircles.transition().attr('r', radius).duration(500);
   } else if ( round == '8 and above') {
     playerCircles.each(function(d) {
       if ( d.Rnd >= 8 ) {
-        d3.select(this).transition().attr('r', 5).duration(500);
+        d3.select(this).transition().attr('r', radius).duration(500);
       } else {
         d3.select(this).transition().attr('r', 0).duration(500);
       }
@@ -164,7 +164,7 @@ function filterByRound(round) {
       if ( d.Rnd != round ) {
         d3.select(this).transition().attr('r', 0).duration(500);
       } else {
-        d3.select(this).transition().attr('r', 5).duration(500);
+        d3.select(this).transition().attr('r', radius).duration(500);
       }
     });
   }
@@ -341,7 +341,6 @@ function drawHeatmap() {
 
       
   playerCircles.transition()
-      //.delay(delay)
       .duration(700)
       .attr("r", 0)
       .attr("cy", height/2);
@@ -351,10 +350,6 @@ function drawHeatmap() {
       .attr("y1", height/2)
       .attr("y2", height/2);
       
-  // individual.selectAll(".yearLabel").transition()
-  //     .duration(700)
-  //     .text("");
-      
   mid.transition()
     .duration(700)
     .style("stroke-width", 0);
@@ -363,10 +358,6 @@ function drawHeatmap() {
       .delay(500)
       .duration(100)
       .style("stroke-width", 1);
-      
-  // positionLabels.transition()
-  //     .delay(700)
-  //     .text(function(d) { return d.name; });
     
   heatmap.selectAll(".fieldLabel").transition()
       .delay(700)
@@ -376,10 +367,7 @@ function drawHeatmap() {
       .delay(500)
       .duration(700)
       .attr("r", 25);
-      
-  // labels.transition()
-  //     .delay(700)
-  //     .text(function(d) { return "(" + d.count + ")"; });
+    
 }
 
 //1. assume data is already bound to playerCircles and positionCircles
@@ -457,12 +445,7 @@ function yearY(d) {
     last = _.last(yPositions[d.Year]['offense']);
     available = last - 2*radius;
     yPositions[d.Year]['offense'].push(available)
-  } else if ( isDefensive ) {
-    last = _.last(yPositions[d.Year]['defense']);
-    available = last + 2*radius;
-    yPositions[d.Year]['defense'].push(available)
   } else {
-    console.log("Not found for: " + d.Pos + " >...name: " + d['']);
     last = _.last(yPositions[d.Year]['defense']);
     available = last + 2*radius;
     yPositions[d.Year]['defense'].push(available)
